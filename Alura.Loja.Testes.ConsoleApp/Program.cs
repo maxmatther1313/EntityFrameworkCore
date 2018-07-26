@@ -14,6 +14,31 @@ namespace Alura.Loja.Testes.ConsoleApp
     {
         static void Main(string[] args)
         {
+            var fulano = new Cliente();
+            fulano.Nome = "Fulaninho de Tal";
+            fulano.EnderecoDeEntrega = new Endereco()
+            {
+                Numero = 12,
+                Logradouro = "Rua dos Aufeneiros",
+                Complemento = "Sobrado",
+                Bairro = "Hogwarts",
+                Cidade = "Ministério da Magia",
+            };
+
+            using(var contexto = new LojaContext())
+            {
+                var serviceProvider = contexto.GetInfrastructure<IServiceProvider>();
+                var loggetFactory = serviceProvider.GetService<ILoggerFactory>();
+                loggetFactory.AddProvider(SqlLoggerProvider.Create());
+
+                contexto.Clientes.Add(fulano);
+                contexto.SaveChanges();
+            }
+        }
+
+        private static void MuitosParaMuitos()
+        {
+
             var p1 = new Produto() { Nome = "Suco de Laranja", Categoria = "Bebidas", PrecoUnitario = 8.79, Unidade = "Litros" };
             var p2 = new Produto() { Nome = "CocaCola", Categoria = "Bebidas", PrecoUnitario = 8.00, Unidade = "Litros" };
             var p3 = new Produto() { Nome = "Café", Categoria = "Bebidas", PrecoUnitario = 15.49, Unidade = "Gramas" };
